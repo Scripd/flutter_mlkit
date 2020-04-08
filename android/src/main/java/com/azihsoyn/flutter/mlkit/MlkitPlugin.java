@@ -335,18 +335,27 @@ public class MlkitPlugin implements MethodCallHandler {
                     int bytesPerChannel = 1;
                     if (inputDataType == FirebaseModelDataType.BYTE) {
                         byte[] data = (byte[]) call.argument("inputBytes");
+                        Log.w("Input Bytes Are: ", Arrays.toString(data));
+                        inputsBuilder.add(data);
                     } else if (inputDataType == FirebaseModelDataType.FLOAT32) {
                         float[] data = (float[]) call.argument("inputBytes");
+                        Log.w("Input Bytes Are: ", Arrays.toString(data));
+                        inputsBuilder.add(data);
                     } else if (inputDataType == FirebaseModelDataType.INT32) {
                         int[] data = (int[]) call.argument("inputBytes");
+                        Log.w("Input Bytes Are: ", Arrays.toString(data));
+                        inputsBuilder.add(data);
                     } else if (inputDataType == FirebaseModelDataType.LONG) {
                         long[] data = (long[]) call.argument("inputBytes");
+                        Log.w("Input Bytes Are: ", Arrays.toString(data));
+                        inputsBuilder.add(data);
                     } else {
                         int[] data = (int[]) call.argument("inputBytes");
+                        Log.w("Input Bytes Are: ", Arrays.toString(data));
+                        inputsBuilder.add(data);
                     }
 
-                    Log.w("Input Bytes Are: ", Arrays.toString(data));
-                    inputsBuilder.add(data);
+                    
                 }
 
                 final List<Map<String, Object>> outputOptions = inputOutputOptionsMap.get("outputOptions");
