@@ -341,6 +341,8 @@ public class MlkitPlugin implements MethodCallHandler {
                         int[] data = (int[]) call.argument("inputBytes");
                     } else if (inputDataType == FirebaseModelDataType.LONG) {
                         long[] data = (long[]) call.argument("inputBytes");
+                    } else {
+                        int[] data = (int[]) call.argument("inputBytes");
                     }
 
                     Log.w("Input Bytes Are: ", Arrays.toString(data));
