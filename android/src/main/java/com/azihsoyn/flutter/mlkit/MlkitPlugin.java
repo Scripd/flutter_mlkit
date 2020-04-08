@@ -130,7 +130,7 @@ public class MlkitPlugin implements MethodCallHandler {
         for (int i = 0; i < l; i++) {
             arr[0][i] = (float)list[i]; 
         }        
-        return arr
+        return arr;
     }
 
     public static int[][] intListToInt2Tensor(int[] list) {
@@ -139,7 +139,7 @@ public class MlkitPlugin implements MethodCallHandler {
         for (int i = 0; i < l; i++) {
             arr[0][i] = list[i]; 
         }        
-        return arr
+        return arr;
     }
 
 
