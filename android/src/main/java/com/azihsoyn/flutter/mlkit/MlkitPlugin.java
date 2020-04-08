@@ -124,6 +124,27 @@ public class MlkitPlugin implements MethodCallHandler {
         return dim;
     }
 
+    public static float[][] intListToFloat2Tensor(int[] list) {
+        l = list.length;
+        float[][] arr = new float[1][l];
+        for (int i = 0; i < l; i++) {
+            arr[0][i] = (float)list[i]; 
+        }        
+        return arr
+    }
+
+    public static int[][] intListToInt2Tensor(int[] list) {
+        l = list.length;
+        int[][] arr = new int[1][l];
+        for (int i = 0; i < l; i++) {
+            arr[0][i] = list[i]; 
+        }        
+        return arr
+    }
+
+
+
+
     @Override
     public void onMethodCall(MethodCall call, final Result result) {
 
@@ -335,25 +356,19 @@ public class MlkitPlugin implements MethodCallHandler {
                     int bytesPerChannel = 1;
                     if (inputDataType == FirebaseModelDataType.BYTE) {
                         byte[] data = (byte[]) call.argument("inputBytes");
-                        Log.w("Input Bytes Are: ", Arrays.toString(data));
+                        Log.w("Input Data Are: ", Arrays.toString(data));
                         inputsBuilder.add(data);
                     } else if (inputDataType == FirebaseModelDataType.FLOAT32) {
-                        float[] data = (float[]) call.argument("inputBytes");
-                        Log.w("Input Bytes Are: ", Arrays.toString(data));
-                        inputsBuilder.add(data);
+                        int[] data = (int[]) call.argument("inputBytes");
+                        float[][] tensor = intListToFloat2Tensor(data);
+                        Log.w("Input Data Are: ", Arrays.toString(data));
+                        inputsBuilder.add(tensor);
                     } else if (inputDataType == FirebaseModelDataType.INT32) {
                         int[] data = (int[]) call.argument("inputBytes");
-                        Log.w("Input Bytes Are: ", Arrays.toString(data));
-                        inputsBuilder.add(data);
-                    } else if (inputDataType == FirebaseModelDataType.LONG) {
-                        long[] data = (long[]) call.argument("inputBytes");
-                        Log.w("Input Bytes Are: ", Arrays.toString(data));
-                        inputsBuilder.add(data);
-                    } else {
-                        int[] data = (int[]) call.argument("inputBytes");
-                        Log.w("Input Bytes Are: ", Arrays.toString(data));
-                        inputsBuilder.add(data);
-                    }
+                        int[][] tensor = intListToInt2Tensor(data);
+                        Log.w("Input Data Are: ", Arrays.toString(data));
+                        inputsBuilder.add(tensor);
+                    } 
 
                     
                 }

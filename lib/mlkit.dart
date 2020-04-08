@@ -257,7 +257,7 @@ class FirebaseModelInterpreter {
       {String remoteModelName,
       String localModelName,
       FirebaseModelInputOutputOptions inputOutputOptions,
-      Uint32List inputBytes}) async {
+      Int32List inputBytes}) async {
     assert(remoteModelName != null || localModelName != null);
     try {
       dynamic results =
