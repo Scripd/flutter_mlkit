@@ -321,7 +321,7 @@ public class MlkitPlugin implements MethodCallHandler {
                 FirebaseModelOptions modelOptions = builder.build();
                 FirebaseModelInputOutputOptions.Builder ioBuilder = new FirebaseModelInputOutputOptions.Builder();
                 FirebaseModelInputs.Builder inputsBuilder = new FirebaseModelInputs.Builder();
-
+                
                 final byte[] data = (byte[]) call.argument("inputBytes");
 
                 Map<String, List<Map<String, Object>>> inputOutputOptionsMap = call.argument("inputOutputOptions");
