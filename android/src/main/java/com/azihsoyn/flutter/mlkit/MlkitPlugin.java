@@ -125,7 +125,7 @@ public class MlkitPlugin implements MethodCallHandler {
     }
 
     public static float[][] intListToFloat2Tensor(int[] list) {
-        l = list.length;
+        int l = list.length;
         float[][] arr = new float[1][l];
         for (int i = 0; i < l; i++) {
             arr[0][i] = (float)list[i]; 
@@ -134,7 +134,7 @@ public class MlkitPlugin implements MethodCallHandler {
     }
 
     public static int[][] intListToInt2Tensor(int[] list) {
-        l = list.length;
+        int l = list.length;
         int[][] arr = new int[1][l];
         for (int i = 0; i < l; i++) {
             arr[0][i] = list[i]; 
