@@ -64,6 +64,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Arrays;
+
 
 import java.io.ByteArrayInputStream;
 import io.flutter.plugin.common.MethodCall;
@@ -323,6 +325,9 @@ public class MlkitPlugin implements MethodCallHandler {
                 FirebaseModelInputs.Builder inputsBuilder = new FirebaseModelInputs.Builder();
                 
                 final byte[] data = (byte[]) call.argument("inputBytes");
+                Log.d("Input Bytes Are: ", Arrays.toString(data));
+                Log.w("Input Bytes Are: ", Arrays.toString(data));
+                Log.e("Input Bytes Are: ", Arrays.toString(data));
 
                 Map<String, List<Map<String, Object>>> inputOutputOptionsMap = call.argument("inputOutputOptions");
 
