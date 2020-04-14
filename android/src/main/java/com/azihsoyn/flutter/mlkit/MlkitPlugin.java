@@ -64,6 +64,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Arrays;
+
 
 import java.io.ByteArrayInputStream;
 import io.flutter.plugin.common.MethodCall;
@@ -121,6 +123,45 @@ public class MlkitPlugin implements MethodCallHandler {
             dim = dim * iter.next();
         return dim;
     }
+
+    public static float[][] doubleListToFloat2Tensor(double[] list) {
+        int l = list.length;
+        float[][] arr = new float[1][l];
+        for (int i = 0; i < l; i++) {
+            arr[0][i] = (float)list[i]; 
+        }        
+        return arr;
+    }
+
+    public static int[][] doubleListToInt2Tensor(double[] list) {
+        int l = list.length;
+        int[][] arr = new int[1][l];
+        for (int i = 0; i < l; i++) {
+            arr[0][i] = (int)list[i]; 
+        }        
+        return arr;
+    }
+
+    public static float[][] intListToFloat2Tensor(double[] list) {
+    int l = list.length;
+    float[][] arr = new float[1][l];
+    for (int i = 0; i < l; i++) {
+        arr[0][i] = (float)list[i]; 
+    }        
+    return arr;
+    }
+
+    public static int[][] intListToInt2Tensor(int[] list) {
+        int l = list.length;
+        int[][] arr = new int[1][l];
+        for (int i = 0; i < l; i++) {
+            arr[0][i] = list[i]; 
+        }        
+        return arr;
+    }
+
+
+
 
     @Override
     public void onMethodCall(MethodCall call, final Result result) {
@@ -322,31 +363,32 @@ public class MlkitPlugin implements MethodCallHandler {
                 FirebaseModelInputOutputOptions.Builder ioBuilder = new FirebaseModelInputOutputOptions.Builder();
                 FirebaseModelInputs.Builder inputsBuilder = new FirebaseModelInputs.Builder();
 
-                final byte[] data = (byte[]) call.argument("inputBytes");
-
                 Map<String, List<Map<String, Object>>> inputOutputOptionsMap = call.argument("inputOutputOptions");
 
                 List<Map<String, Object>> inputOptions = inputOutputOptionsMap.get("inputOptions");
-                int offset = 0;
-                for (int i = 0; i < inputOptions.size(); i++) {
+                for (int i = 0; i < 1; i++) {
                     int inputDataType = (int) inputOptions.get(i).get("dataType");
                     ArrayList<Integer> _inputDims = (ArrayList<Integer>) inputOptions.get(i).get("dims");
                     ioBuilder.setInputFormat(i, inputDataType, toArray(_inputDims));
 
                     int bytesPerChannel = 1;
-                    if (inputDataType == FirebaseModelDataType.FLOAT32
-                            || inputDataType == FirebaseModelDataType.INT32) {
-                        bytesPerChannel = 4;
-                    } else if (inputDataType == FirebaseModelDataType.LONG) {
-                        bytesPerChannel = 8;
-                    }
-                    int length = toDim(_inputDims) * bytesPerChannel;
-                    ByteBuffer buffer = ByteBuffer.allocateDirect(length);
-                    buffer.order(ByteOrder.nativeOrder());
-                    buffer.rewind();
-                    buffer.put(data, offset, length);
-                    offset += length;
-                    inputsBuilder.add(buffer);
+                    if (inputDataType == FirebaseModelDataType.BYTE) {
+                        byte[] data = (byte[]) call.argument("inputBytes");
+                        Log.w("Input Data Are: ", Arrays.toString(data));
+                        inputsBuilder.add(data);
+                    } else if (inputDataType == FirebaseModelDataType.FLOAT32) {
+                        double[] data = (double[]) call.argument("inputBytes");
+                        float[][] tensor = doubleListToFloat2Tensor(data);
+                        Log.w("Input Data Are: ", Arrays.toString(data));
+                        inputsBuilder.add(tensor);
+                    } else if (inputDataType == FirebaseModelDataType.INT32) {
+                        double[] data = (double[]) call.argument("inputBytes");
+                        int[][] tensor = doubleListToInt2Tensor(data);
+                        Log.w("Input Data Are: ", Arrays.toString(data));
+                        inputsBuilder.add(tensor);
+                    } 
+
+                    
                 }
 
                 final List<Map<String, Object>> outputOptions = inputOutputOptionsMap.get("outputOptions");
