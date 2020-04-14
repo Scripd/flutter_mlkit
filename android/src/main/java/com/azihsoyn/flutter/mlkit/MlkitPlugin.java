@@ -124,13 +124,31 @@ public class MlkitPlugin implements MethodCallHandler {
         return dim;
     }
 
-    public static float[][] intListToFloat2Tensor(int[] list) {
+    public static float[][] doubleListToFloat2Tensor(double[] list) {
         int l = list.length;
         float[][] arr = new float[1][l];
         for (int i = 0; i < l; i++) {
             arr[0][i] = (float)list[i]; 
         }        
         return arr;
+    }
+
+    public static int[][] doubleListToInt2Tensor(double[] list) {
+        int l = list.length;
+        int[][] arr = new int[1][l];
+        for (int i = 0; i < l; i++) {
+            arr[0][i] = (int)list[i]; 
+        }        
+        return arr;
+    }
+
+    public static float[][] intListToFloat2Tensor(double[] list) {
+    int l = list.length;
+    float[][] arr = new float[1][l];
+    for (int i = 0; i < l; i++) {
+        arr[0][i] = (float)list[i]; 
+    }        
+    return arr;
     }
 
     public static int[][] intListToInt2Tensor(int[] list) {
@@ -359,13 +377,13 @@ public class MlkitPlugin implements MethodCallHandler {
                         Log.w("Input Data Are: ", Arrays.toString(data));
                         inputsBuilder.add(data);
                     } else if (inputDataType == FirebaseModelDataType.FLOAT32) {
-                        int[] data = (int[]) call.argument("inputBytes");
-                        float[][] tensor = intListToFloat2Tensor(data);
+                        double[] data = (double[]) call.argument("inputBytes");
+                        float[][] tensor = doubleListToFloat2Tensor(data);
                         Log.w("Input Data Are: ", Arrays.toString(data));
                         inputsBuilder.add(tensor);
                     } else if (inputDataType == FirebaseModelDataType.INT32) {
-                        int[] data = (int[]) call.argument("inputBytes");
-                        int[][] tensor = intListToInt2Tensor(data);
+                        double[] data = (double[]) call.argument("inputBytes");
+                        int[][] tensor = doubleListToInt2Tensor(data);
                         Log.w("Input Data Are: ", Arrays.toString(data));
                         inputsBuilder.add(tensor);
                     } 
