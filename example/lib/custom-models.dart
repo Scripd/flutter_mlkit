@@ -136,17 +136,22 @@ class _CustomModelWidgetState extends State<CustomModelWidget> {
                 if (options.inputOptions[0].dataType ==
                     FirebaseModelDataType.BYTE) {
                   var bytes = await imageToByteListInt(_file, dim);
+                  //TODO: Fix example ?
+                  /*
                   results = await interpreter.run(
                       localModelName: _localModels[_currentModel],
                       inputOutputOptions: options,
                       inputBytes: bytes);
+                  */
                   factor = 2.55;
                 } else {
                   var bytes = await imageToByteListFloat(_file, dim);
+                  /*
                   results = await interpreter.run(
                       localModelName: _localModels[_currentModel],
                       inputOutputOptions: options,
                       inputBytes: bytes);
+                  */
                 }
 
                 print(results);

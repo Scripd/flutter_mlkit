@@ -39,8 +39,14 @@ UIImage* imageFromImageSourceWithData(NSData *data) {
     return image;
 }
 
+union intToFloat64
+{
+    uint32_t i;
+    Float64 flt;
+};
+
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    NSMutableArray *ret = [NSMutableArray array];
+    //NSMutableArray *ret = [[NSMutableArray alloc] init];
 
 
 
@@ -149,9 +155,52 @@ UIImage* imageFromImageSourceWithData(NSData *data) {
         }
         
         FIRModelInputs *inputs = [[FIRModelInputs alloc] init];
+        
         FlutterStandardTypedData* typedData = call.arguments[@"inputBytes"];
+        NSLog(@"bytes in hex: %@", typedData.data);
+
+        //NSLog(@"typedData.data.length: %lu", (long) typedData.data.length);
+        //NSLog(@"typedData.elementCount: %d", typedData.elementCount);
+        //NSLog(@"typedData.elementSize: %d", typedData.elementSize);
+     
+   
+        NSMutableData *inputData = [[NSMutableData alloc] initWithCapacity:0];
+        
+        for (int i = 0; i< typedData.elementCount; i++) {
+            int dataStart = (i)*typedData.elementSize;
+            //int dataEnd = (i+1)*typedData.elementSize;
+            //NSLog(@"dataStart: %i", dataStart);
+            //NSLog(@"dataEnd:%i", dataEnd);
+            NSData *data = [typedData.data subdataWithRange:NSMakeRange(dataStart,typedData.elementSize)];
+            //NSLog(@"bytes in hex: %@", data);
+            
+            double doubleValue = *(double *) [data bytes];
+            //NSLog(@"double[%i]: %.20f", i, doubleValue);
+            //Float64 thisValue = [[self class] float64AtOffset:i*typedData.elementSize inData: typedData.data];
+            //NSLog(@"input[%d]: %f", i, thisValue);
+            float floatValue = (float)doubleValue;
+            NSLog(@"float[%i]: %.20f", i, floatValue);
+            [inputData appendBytes:&floatValue length:sizeof(floatValue)];
+            
+        }
+        //return;
+        NSLog(@"inputData bytes in hex: %@", inputData);
+        [inputs addInput:inputData error:&error];
+        
+        /*
+         FIRModelInputs *inputs2 = [[FIRModelInputs alloc] init];
+        NSMutableData *inputData = [[NSMutableData alloc] initWithCapacity:0];
+        float myValue = 184;
+        for (int row = 0; row < 24; row++) {
+            [inputData appendBytes:&myValue length:sizeof(myValue)];
+        }
+         */
+        
+        //[inputs addInput:inputData error:&error];
+        
+
         // ...
-        [inputs addInput:typedData.data error:&error];  // Repeat as necessary.
+        // Repeat as necessary.
         if (error != nil) {
             NSLog(@"Failed addInput with error: %@", error);
             return;
@@ -167,6 +216,7 @@ UIImage* imageFromImageSourceWithData(NSData *data) {
                                 return;
                             }
                             __block NSMutableArray<NSObject *> *ret =[NSMutableArray array];
+                            NSMutableArray<NSObject *> *thisRet =[NSMutableArray array];
                             for (int i = 0; i < [outputOptions count]; i++)
                             {
                                 NSObject *outputArray = [outputs outputAtIndex:i error:&error];
@@ -180,8 +230,8 @@ UIImage* imageFromImageSourceWithData(NSData *data) {
                                     NSLog(@"Failed to get the results array from output.");
                                     return;
                                 }
-                                
-                                [ret addObject:processList(outputArray)];
+                                thisRet = processList(outputArray);
+                                [ret addObjectsFromArray:thisRet];
                             }
                             result(ret);
                             return;
@@ -198,7 +248,7 @@ NSMutableArray *processList(NSObject * o) {
         for (int i = 0; i < length; i++) {
             NSObject *o2 = [((NSArray *)o) objectAtIndex:i];
             if ([o2 isKindOfClass:[NSArray class]]) {
-                [list addObject:processList(o2)];
+                [list setArray:processList(o2)];
             } else {
                 [list addObject:o2];
             }

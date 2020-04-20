@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
 
 /*
 class VisionText {
@@ -258,6 +259,9 @@ class FirebaseModelInterpreter {
       String localModelName,
       FirebaseModelInputOutputOptions inputOutputOptions,
       Float64List inputBytes}) async {
+    debugPrint("inputBytes: ${inputBytes}");
+    debugPrint("inputBytes.length: ${inputBytes.length}");
+    debugPrint("inputBytes.lengthInBytes: ${inputBytes.lengthInBytes}");
     assert(remoteModelName != null || localModelName != null);
     try {
       dynamic results =
@@ -269,7 +273,7 @@ class FirebaseModelInterpreter {
       });
       return results;
     } catch (e) {
-      print("Error on FirebaseModelInterpreter#run : ${e.toString()}");
+      debugPrint("Error on FirebaseModelInterpreter#run : ${e.toString()}");
     }
     return null;
   }
