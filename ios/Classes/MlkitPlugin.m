@@ -215,7 +215,7 @@ union intToFloat64
                                 NSLog(@"Failed runWithInputs with error: %@", error.localizedDescription);
                                 return;
                             }
-                            __block NSMutableArray<NSObject *> *ret =[NSMutableArray array];
+                            NSMutableArray<NSObject *> *ret =[NSMutableArray array];
                             NSMutableArray<NSObject *> *thisRet =[NSMutableArray array];
                             for (int i = 0; i < [outputOptions count]; i++)
                             {
@@ -231,7 +231,15 @@ union intToFloat64
                                     return;
                                 }
                                 thisRet = processList(outputArray);
-                                [ret addObjectsFromArray:thisRet];
+                                NSArray *array = [thisRet copy];
+                                [ret addObjectsFromArray:array];
+                                NSLog(@"results in objective C:");
+                                for (int j = 0; j < [ret count]; j++)
+                                {
+                                    NSLog(@"ret[%d]: is %@", j, [ret[j] description]);
+                                    //NSLog(@"ret[%d]: %.21g", j, ret[j]);
+                                }
+                               
                             }
                             result(ret);
                             return;
@@ -242,14 +250,18 @@ union intToFloat64
 }
 
 NSMutableArray *processList(NSObject * o) {
+
     __block NSMutableArray<NSObject *> *list =[NSMutableArray array];
     if ([o isKindOfClass:[NSArray class]]) {
         int length = [((NSArray *)o) count];
+        NSLog(@"processing list in objective C:");
         for (int i = 0; i < length; i++) {
             NSObject *o2 = [((NSArray *)o) objectAtIndex:i];
             if ([o2 isKindOfClass:[NSArray class]]) {
                 [list setArray:processList(o2)];
             } else {
+                NSLog(@"o2 is %@", [o2 description]);
+                //NSLog(@"list[%d]: %.21g", i, (double) o2);
                 [list addObject:o2];
             }
         }
